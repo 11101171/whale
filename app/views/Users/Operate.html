@@ -1,0 +1,153 @@
+{{set . "title" "Home"}}
+{{template "layout_v1/header.html" .}}
+<div class="row">
+    <div>
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+            {{if .user.UserId}}
+                <h5>修改用户</h5>
+            {{else}}
+                <h5>添加用户</h5>
+            {{end}}
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="ibox-content">
+                <form class="form-horizontal m-t" id="signupForm" action="{{url "Users.Add"}}" method="post">
+                    {{with $field := field "user.Username" .}}
+                      <div class="form-group">
+                        <label class="col-sm-3 control-label">用户名：</label>
+                        <div class="col-sm-8">
+                            <input id="username" name="{{$field.Name}}" class="form-control" type="text" aria-required="true" aria-invalid="true" class="error" value="{{$field.Value}}{{$field.Flash}}" >
+                            <p class="m-t-md" style="color:red;">{{$field.Error}}</p>
+                        </div>
+                      </div>
+                    {{end}}
+                    {{with $field := field "user.Nickname" .}}
+                      <div class="form-group">
+                        <label class="col-sm-3 control-label">昵称：</label>
+                        <div class="col-sm-8">
+                            <input id="nickname" name="{{$field.Name}}" class="form-control" type="text" aria-required="true" aria-invalid="true" class="error" value="{{$field.Value}}{{$field.Flash}}" >
+                            <p class="m-t-md" style="color:red;">{{$field.Error}}</p>
+                        </div>
+                      </div>
+                    {{end}}
+                    {{with $field := field "user.Password" .}}
+                      <div class="form-group">
+                        <label class="col-sm-3 control-label">密码：</label>
+                        <div class="col-sm-8">
+                            <input id="password" name="{{$field.Name}}" class="form-control" type="password" aria-required="true" aria-invalid="true" class="error" value="{{$field.Value}}{{$field.Flash}}" >
+                            <p class="m-t-md" style="color:red;">{{$field.Error}}</p>
+                        </div>
+                      </div>
+                    {{end}}
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">确认密码：</label>
+                        <div class="col-sm-8">
+                            <input id="confirm_password" name="confirm_password" class="form-control" type="password">
+                            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 请再次输入您的密码</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-3">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" class="checkbox" id="agree" name="agree" checked> 我已经认真阅读并同意《使用协议》
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    {{if .user.UserId}}
+                        {{with $field := field "user.UserId" .}}
+                        <input type="hidden" name="{{$field.Name}}" value="{{$field.Value}}">
+                        {{end}}
+                    {{end}}
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-3">
+                            <button class="btn btn-primary" type="submit">提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{template "layout_v1/footer.html" .}}
+
+<script>
+$.validator.setDefaults({
+    highlight: function(a) {
+        $(a).closest(".form-group").removeClass("has-success").addClass("has-error")
+    },
+    success: function(a) {
+        a.closest(".form-group").removeClass("has-error").addClass("has-success")
+    },
+    errorElement: "span",
+    errorPlacement: function(a, b) {
+        if (b.is(":radio") || b.is(":checkbox")) {
+            a.appendTo(b.parent().parent().parent())
+        }
+
+        else {
+            a.appendTo(b.parent())
+        }
+    },
+    errorClass: "help-block m-b-none",
+    validClass: "help-block m-b-none"
+});
+$().ready(function() {
+    var a = "<i class='fa fa-times-circle'></i> ";
+    $("#signupForm").validate({
+        rules: {
+            'user.Username': {
+                required: true,
+                maxlength: 12,
+                minlength: 1
+            },
+            'user.Nickname': {
+                required: true,
+                maxlength: 4,
+                minlength: 1
+            },
+            'user.Password': {
+                required: true,
+                minlength: 6
+            },
+            confirm_password: {
+                required: true,
+                minlength: 6,
+                equalTo: "#password"
+            },
+            agree: "required"
+        },
+        messages: {
+            'user.Username': {
+                required: a + "请输入您的用户名",
+                maxlength: a + "用户名必须12个字符以下",
+                minlength: a + "用户名必须6个字符以上"
+            },
+            'user.Nickname': {
+                required: a + "请输入您的用户名",
+                maxlength: a + "昵称必须4个字符以下",
+                minlength: a + "昵称必须1个字符以上"
+            },
+            'user.Password': {
+                required: a + "请输入您的密码",
+                minlength: a + "密码必须6个字符以上"
+            },
+            confirm_password: {
+                required: a + "请再次输入密码",
+                minlength: a + "密码必须6个字符以上",
+                equalTo: a + "两次输入的密码不一致"
+            }
+        }
+    });
+
+});
+</script>

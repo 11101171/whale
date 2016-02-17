@@ -1,2 +1,2 @@
 # whale
-Go Web by framework revel
+go revel framework web
