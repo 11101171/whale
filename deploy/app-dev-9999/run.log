@@ -1,0 +1,21 @@
+Listening on :9999...
+[================] 
+[Method=> GET] %!v(MISSING) 
+[Action=> Servers.Index] %!v(MISSING) 
+[Params=> map[]] %!v(MISSING) 
+[================] 
+[Method=> GET] %!v(MISSING) 
+[Action=> Servers.Info] %!v(MISSING) 
+[Params=> map[]] %!v(MISSING) 
+[================] 
+[Method=> GET] %!v(MISSING) 
+[Action=> Servers.Active] %!v(MISSING) 
+[Params=> map[]] %!v(MISSING) 
+[================] 
+[Method=> GET] %!v(MISSING) 
+[Action=> Servers.Active] %!v(MISSING) 
+[Params=> map[]] %!v(MISSING) 
+[================] 
+[Method=> GET] %!v(MISSING) 
+[Action=> Servers.Active] %!v(MISSING) 
+[Params=> map[]] %!v(MISSING) 
