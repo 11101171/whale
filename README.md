@@ -12,9 +12,9 @@ mysql
 + After that, there is an account for you to use,  account name is 'super', password '123456'
 
 #deploy
-##run
-+ 模式dev:   sh run-dev-9999.sh start 
-+ 模式prod:  sh run-prod-9988.sh start
+> ##run
+> 模式dev:   sh run-dev-9999.sh start 
+> 模式prod:  sh run-prod-9988.sh start
 
-##stop
-+ sh run-dev-9999.sh stop
+> ##stop
+> sh run-dev-9999.sh stop
