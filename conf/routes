@@ -4,16 +4,31 @@
 
 module:testrunner
 
-*       /auth/login         Auth.Login
-GET     /                   App.Index
+*       /auth/login                Auth.Login
+GET     /auth/logout               Auth.Logout
+GET     /                          App.Index
 
-GET    /users/list          Users.List
-*      /users/operate       Users.Operate
-*      /users/:id/operate   Users.Operate
-*      /users/:id/del       Users.Del
+# 用户
+GET    /users/list                 Users.List
+*      /users/operate              Users.Operate
+*      /users/:id/operate          Users.Operate
+*      /users/:id/del              Users.Del
 
-GET    /agents/list         Agents.List
+# 远程机器
+GET    /agents/list                Agents.List
+*      /agents/operate             Agents.Operate
+*      /agents/:id/operate         Agents.Operate
+*      /agents/:id/del             Agents.Del
+GET    /agents/ssh/list            Agents.SshList
+GET    /agents/ssh/:agentId        Agents.SshOne
+WS    /agents/ssh/join/:agentId   Agents.SshJoin
 
+GET    /cmds/list/:agentId         Cmds.List
+*      /cmds/:agentId/operate      Cmds.Operate
+*      /cmds/:agentId/operate/:id  Cmds.Operate
+*      /cmds/:id/del               Cmds.Del
+
+# api
 GET    /servers/index               Servers.Index
 GET    /servers/index/:serverId     Servers.Index
 GET    /servers/list                Servers.List

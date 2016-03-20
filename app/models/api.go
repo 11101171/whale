@@ -12,8 +12,6 @@ import (
 	"net/url"
 	"sort"
 	"strings"
-
-	"github.com/revel/revel"
 )
 
 type Api struct {
@@ -108,7 +106,6 @@ func (apiParam *ApiParam) ReplaceValue(values url.Values) {
 			}
 		}
 	}
-	revel.INFO.Println("fileds+>", apiParam.Fileds)
 }
 
 func (apiParam *ApiParam) Encode(values url.Values) map[string]interface{} {
@@ -123,7 +120,6 @@ func (apiParam *ApiParam) Encode(values url.Values) map[string]interface{} {
 
 		}
 	}
-	revel.INFO.Println("encode", data)
 	return data
 }
 
@@ -139,7 +135,6 @@ func (apiParam *ApiParam) Md5(keyvalue string) string {
 	params = strings.TrimLeft(params, "&")
 	params = params + "key=" + keyvalue
 
-	revel.INFO.Println("params", params)
 	cipherStr := md5.Sum([]byte(params))
 	return strings.ToUpper(hex.EncodeToString(cipherStr[:]))
 }

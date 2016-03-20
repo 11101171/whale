@@ -46,13 +46,29 @@ func (c *Super) SessionGetUser() (user models.User) {
 	return user
 }
 
+func (c *Super) SessionClear() {
+	delete(c.Session, LOGIN_USERID)
+	delete(c.Session, LOGIN_USERROLE)
+	delete(c.Session, LOGIN_USERNAME)
+}
+
 // func init() {
 // revel.InterceptFunc(CheckLogin, revel.BEFORE, &App{})
 // }
 func CheckLogin(c *revel.Controller) revel.Result {
-	revel.INFO.Println("CheckLogin" + c.Session[LOGIN_USERID])
 	if c.Session[LOGIN_USERID] == "" {
-		return c.Redirect("/auth/login")
+		return c.Redirect(
+			revel.MainRouter.Reverse("Auth.Login", map[string]string{}).Url,
+		)
+	}
+	return nil
+}
+
+func CheckLoginAdmin(c *revel.Controller) revel.Result {
+	if c.Session[LOGIN_USERID] == "" || models.Role(c.Session[LOGIN_USERROLE]) != models.ROLE_SUPER_ADMIN {
+		return c.Redirect(
+			revel.MainRouter.Reverse("Auth.Login", map[string]string{}).Url,
+		)
 	}
 	return nil
 }

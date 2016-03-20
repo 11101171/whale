@@ -45,12 +45,15 @@ var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
 	fc[0](c, fc[1:]) // Execute the next filter stage.
 }
 
+// Remember Records
 var ActionInvoker = func(c *revel.Controller, fc []revel.Filter) {
 	if c.MethodName != "Serve" {
-		ToString("================")
-		ToString("Method=>", c.Request.Method)
-		ToString("Action=>", c.Action)
-		ToString("Params=>", c.Params.Form)
+		revel.INFO.Printf("{data} Method[%s] Action[%s] Params[%s] Who[%s]",
+			c.Request.Method,
+			c.Action,
+			c.Params.Form,
+			c.Session["001"],
+		)
 		// ToString("Args=>", c.Args)
 		// ToString("Flash=>", c.Flash)
 		// ToString("================")

@@ -1,0 +1,22 @@
+{{set . "title" "Home"}}
+ <!DOCTYPE html>
+    {{template "layout_v2/header.html" .}}
+     <body class="fixed-sidebar full-height-layout gray-bg fixed-nav pace-done">
+            <div class="pace  pace-inactive">
+                <div class="pace-progress" data-progress-text="100%" data-progress="99" style="width: 100%;">
+                    <div class="pace-progress-inner"></div>
+                </div>
+                <div class="pace-activity"></div>
+            </div>
+            <div id="wrapper">
+                <!--左侧部分开始 -->
+                {{template "layout_v2/leftside.html" .}}
+                <!--左侧部分结束  -->
+                 <!--右侧部分开始 -->
+                {{template "layout_v2/main.html" .}}
+                <!--右侧部分结束 -->
+                {{template "layout_v2/footer.html" .}}
+                 <script src="/public/term/term.js"></script>
+            </div>
+    </body>
+</html>

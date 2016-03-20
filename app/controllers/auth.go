@@ -36,3 +36,10 @@ func (c Auth) Login(user models.User) revel.Result {
 		}
 	}
 }
+
+func (c Auth) Logout() revel.Result {
+	c.SessionClear()
+	return c.Redirect(
+		revel.MainRouter.Reverse("Auth.Login", map[string]string{}).Url,
+	)
+}

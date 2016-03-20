@@ -9,8 +9,8 @@
                     </div>
                     <div class="ibox-content">
                         <div class="">
-                           <!--  <a onclick="fnClickAddRow();" href="javascript:void(0);" class="btn btn-primary ">添加行</a> -->
-                            <a href="{{url "Users.Operate" }}" class="btn btn-primary ">新增远程机器</a>
+                            <a href="{{url "Agents.Operate" }}" class="btn btn-primary ">新增远程机器</a>
+                            <a href="{{url "Agents.SshList"}}" target="_blank" class="btn btn-primary ">连接远程</a>
                         </div>
                         <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="8">
                                 <thead>
@@ -28,7 +28,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {{range $index, $elem := .Agents}}
+                                {{range $index, $elem := .agents}}
                                 <tr class="gradeX">
                                     <td>{{$index}}</td>
                                     <td>{{$elem.Memo}}</td>
@@ -37,16 +37,25 @@
                                     <td>{{$elem.LoginName}}</td>
                                     <td>{{$elem.LoginPass}}</td>
                                     <td class="center">{{$elem.InitShellCmd}}</td>
-                                    <td class="center">{{date $elem.GmtCreated "Y-m-d H:i:s"}}</td>
-                                   ssss
+                                    <td class="center">{{datetime $elem.GmtCreate}}</td>
+                                     <td class="center">
+                                        <ul class="list-group">
+                                            {{range $ind, $cmd := $elem.GetCmds}}
+                                        <li class="list-group-item">
+                                            <span class="badge badge-primary">{{$ind}}</span> {{$cmd.Shell}}
+                                            <a href="{{url "Cmds.Operate" $elem.AgentId $cmd.CmdId}}"><i class="fa fa-paste" >编辑</i></a>
+                                            <a href="{{url "Cmds.Del" $cmd.CmdId}}"><i class="fa fa-warning" >删除</i></a><br/>
+                                        </li>
+                                             {{end}}
+                                        </ul>
+                                        <a href="{{url "Cmds.Operate" $elem.AgentId}}"><button class="btn btn-primary" type="button" style="font-size:10px;" ><i class="fa fa-check" ></i> 新增cmd</button></a>
+                                    </td>
                                     <th>
-                                        <a href="#"><button class="btn btn-primary" type="button" style="font-size:10px;"><i class="fa fa-check"></i> 查看</button></a>
+                                        <a href="{{url "Agents.Operate" $elem.AgentId}}"><button class="btn btn-primary" type="button" style="font-size:10px;"><i class="fa fa-check"></i> 查看</button></a>
 
-                                        <a href="/admin/agent/operate/{{$elem.Id}}"><button class="btn btn-info " type="button" style="font-size:10px;"><i class="fa fa-paste"></i> 编辑</button></a>
+                                        <a href="{{url "Agents.Operate" $elem.AgentId}}"><button class="btn btn-info " type="button" style="font-size:10px;"><i class="fa fa-paste"></i> 编辑</button></a>
 
-                                        <a href="javascript:void(0)"><button class="btn btn-warning" type="button" style="font-size:10px;" name="/admin/agent/delete/{{$elem.Id}}" ><i class="fa fa-warning" ></i> 删除</button></a>
-
-                                         <a href="/admin/ssh/{{$elem.Id}}" target="_blank"><button class="btn btn-primary" type="button" style="font-size:10px;"><i class="fa fa-code-fork"></i> 连接远程</button></a>
+                                        <a href="javascript:void(0)"><button class="btn btn-warning" type="button" style="font-size:10px;" name="{{url "Agents.Del" $elem.AgentId}}" ><i class="fa fa-warning" ></i> 删除</button></a>
 
                                         </th>
                                 </tr>
@@ -69,12 +78,9 @@
 
 {{template "layout_v1/footer.html" .}}
 
-
     <script>
         $(document).ready(function() {
-
             $('.footable').footable();
-
         });
 
         $('.btn-warning').click(function () {

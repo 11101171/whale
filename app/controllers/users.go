@@ -21,14 +21,6 @@ func (c Users) List() revel.Result {
 	return c.Render(users)
 }
 
-func (c Users) Del(id string) revel.Result {
-	if id != "" && models.DeleteUserOneByUserId(id) {
-		// return c.RenderJsonSuc()
-		return c.Redirect(routes.Users.List())
-	}
-	return c.RenderJsonErr()
-}
-
 func (c Users) Operate(id string, user models.User) revel.Result {
 	if c.IsGet() {
 		if id != "" {
@@ -58,4 +50,15 @@ func (c Users) Operate(id string, user models.User) revel.Result {
 		}
 		return c.Redirect(routes.Users.List())
 	}
+}
+
+func (c Users) Del(id string) revel.Result {
+	if id != "" && models.DeleteUserOneByUserId(id) {
+		return c.Redirect(routes.Users.List())
+	}
+	return c.RenderJsonErr()
+}
+
+func init() {
+	revel.InterceptFunc(CheckLoginAdmin, revel.BEFORE, &Users{})
 }

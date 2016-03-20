@@ -1,8 +1,12 @@
 # whale
-so revel framework web
+a revel framework web, 1.Provide SSH login and custom script by youseft; 2.Online API testing; 
+
+#database
+mysql
 
 #Data
-Import Sql folder
+Import Sql folder conf: data.json
+Config app.conf of mysql account
 
 #Deploy
 ##run

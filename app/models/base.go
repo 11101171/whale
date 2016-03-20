@@ -6,7 +6,6 @@ package models
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"math/rand"
 	"time"
@@ -63,10 +62,6 @@ func InitDB() *gorp.DbMap {
 	// construct a gorp DbMap
 	dbmap = &gorp.DbMap{Db: db, Dialect: gorp.MySQLDialect{"InnoDB", "UTF8"}}
 
-	// add a table, setting the table name to 'posts' and
-	// specifying that the Id property is an auto incrementing PK
-	// dbmap.AddTableWithName(Post{}, "posts").SetKeys(true, "Id")
-	fmt.Sprintf("random %d", rand.Int63())
 	setColumnSizes := func(t *gorp.TableMap, colSizes map[string]int) {
 		for col, size := range colSizes {
 			t.ColMap(col).MaxSize = size
@@ -94,10 +89,19 @@ func InitDB() *gorp.DbMap {
 		"Host":         100,
 		"Port":         4,
 		"LoginName":    30,
-		"LoginPass":    30,
+		"LoginPass":    100,
 		"InitShellCmd": 2000,
 		"Memo":         500,
 		"UserId":       45,
+	})
+
+	cmdAable := dbmap.AddTableWithName(Cmd{}, "o_cmd")
+	cmdAable.SetKeys(false, "CmdId")
+	cmdAable.ColMap("Shell").SetNotNull(true)
+	setColumnSizes(cmdAable, map[string]int{
+		"Shell":   100,
+		"CmdId":   45,
+		"AgentId": 45,
 	})
 
 	serverAable := dbmap.AddTableWithName(Server{}, "p_server")
@@ -110,8 +114,6 @@ func InitDB() *gorp.DbMap {
 	})
 
 	dbmap.TraceOn("[gorp]", revel.INFO)
-	// create the table. in a production system you'd generally
-	// use a migration tool, or create the tables via scripts
 	err = dbmap.CreateTablesIfNotExists()
 	CheckErr(err, "Create tables failed")
 
@@ -138,7 +140,7 @@ func RandomString(pixff string, strlen int) string {
 	for i := 0; i < strlen; i++ {
 		result[i] = alphanum[rand.Intn(len(alphanum))]
 	}
-	return time.Now().Format("20151212010203") + "-" + pixff + "-" + string(result)
+	return time.Now().Format("20151212010203") + string(result) + pixff
 }
 
 // base model transferion

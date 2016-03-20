@@ -21,35 +21,6 @@ type Servers struct {
 	Super
 }
 
-var jsonContent = `
-{
-    "host":"http://www.baidu.com/",
-    "port":"80",
-    "name":"大搜车api",
-    "lists":[
-        {
-            "folder":"css","sort":"1","api_params":[
-            {
-                "id":"iuiui",
-                "path":"/admin/server/encode",
-                "method":"GET",
-                "fileds":[
-                        {"name":"username", "ftype":"text", "value":"zhangsan","lable":"用户名(不能小于3个字符)","placeholder":"如:张三"},
-                        {"name":"passwrod", "ftype":"text", "value":"","lable":"密码","placeholder":"如:abc123"},
-                        {"name":"sign", "ftype":"text", "value":"","lable":"秘钥","placeholder":"按加密按钮即可", "salt":"xxs", "pftype":"MD5","pway":"1"}
-                 ]
-            }]
-        },
-        {
-            "folder":"email","sort":"1","api_params":[]
-        },
-        {
-            "folder":"img","sort":"1","api_params":[]
-        }
-    ]
-}
-`
-
 func (c Servers) Index(serverId string) revel.Result {
 	user := c.SessionGetUser()
 	servers := models.SelectServerListByUserId(user.UserId)
@@ -90,13 +61,12 @@ func (c Servers) Operate(id string, server models.Server) revel.Result {
 			if c.Validation.HasErrors() {
 				return c.Render(server)
 			}
-			if !models.UpdateOneServer(&server) {
+			if !models.UpdateServerOne(&server) {
 				return c.ErrDataBase(MsgUpdateError)
 			}
 		} else {
 			server.UserId = c.SessionGetUser().UserId
 			server.ValidateInsert(c.Validation)
-			revel.INFO.Println(c.Validation.ErrorMap())
 			if c.Validation.HasErrors() {
 				return c.Render(server)
 			}
@@ -109,39 +79,26 @@ func (c Servers) Operate(id string, server models.Server) revel.Result {
 }
 
 func (c Servers) Del(id string) revel.Result {
-	if id != "" && models.DeleteOneServerByServerId(id) {
+	if id != "" && models.DeleteServerOneByServerId(id) {
 		return c.Redirect(routes.Servers.List())
 	}
 	return c.RenderJsonErr()
 }
 
-var api = `
-            {
-                "host":"http://localhost:9099/admin/server/encode",
-                "method":"GET",
-                "fileds":[
-                        {"name":"username", "ftype":"text", "value":"zhangsan","lable":"用户名(不能小于3个字符)","placeholder":"如:张三"},
-                        {"name":"passwrod", "ftype":"text", "value":"","lable":"密码","placeholder":"如:abc123"},
-                        {"name":"sign", "ftype":"text", "value":"","lable":"秘钥","placeholder":"按加密按钮即可", "salt":"xxs", "pftype":"MD5","pway":"1"}
-                 ]
-            }
-        `
-
 func (c Servers) Active(serverId string, apiParamId string, apiParam models.ApiParam) revel.Result {
 	if c.IsGet() {
 		server := models.SelectServerOneByServerId(serverId)
 		if server.ServerId == "" {
-			return c.ErrDataBase("查找失败")
+			return c.ErrDataBase(MsgSeleteError)
 		}
 
 		apiParam := models.ParseApi(server.Content, apiParamId)
-		revel.INFO.Println("host", apiParam.Host)
 		return c.Render(apiParam, serverId, apiParamId)
 	} else {
 		var values = c.Params.Form
+		var location = values["location[]"]
 		values.Del("Host")
 		values.Del("Method")
-		var location = values["location[]"]
 		values.Del("location[]")
 		req, err := http.NewRequest(apiParam.Method, apiParam.Host, strings.NewReader(values.Encode()))
 		if err != nil {
@@ -177,7 +134,7 @@ func (c Servers) Active(serverId string, apiParamId string, apiParam models.ApiP
 func (c Servers) Share(serverId string) revel.Result {
 	server := models.SelectServerOneByServerId(serverId)
 	if server.ServerId == "" {
-		return c.ErrDataBase("查找失败")
+		return c.ErrDataBase(MsgSeleteError)
 	}
 	jsonBody := models.Api{}
 	json.Unmarshal([]byte(server.Content), &jsonBody)
@@ -187,7 +144,7 @@ func (c Servers) Share(serverId string) revel.Result {
 func (c Servers) Encode(serverId string, apiParamId string) revel.Result {
 	server := models.SelectServerOneByServerId(serverId)
 	if server.ServerId == "" {
-		return c.ErrInputData("错误的id")
+		return c.ErrInputData(MsgSeleteError)
 	}
 
 	apiParam := models.ParseApi(server.Content, apiParamId)

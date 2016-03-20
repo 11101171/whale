@@ -1,4 +1,3 @@
-//****************************************************/
 // https://github.com/11101171
 // Author: ningzhong.zeng
 //****************************************************/
@@ -24,7 +23,6 @@ func (server *Server) Validate(v *revel.Validation) {
 	server.Theme = strings.TrimSpace(server.Theme)
 	server.Content = strings.TrimSpace(server.Content)
 
-	revel.INFO.Println(server.Content)
 	v.Check(server.Theme,
 		revel.Required{},
 		revel.MinSize{Min: 1},
@@ -75,7 +73,7 @@ func SelectServerOneByServerId(serverId string) (server Server) {
 	return server
 }
 
-func UpdateOneServer(server *Server) bool {
+func UpdateServerOne(server *Server) bool {
 	return Exec(
 		"update p_server set Theme=:Theme, Content=:Content where ServerId=:ServerId",
 		map[string]string{
@@ -86,7 +84,7 @@ func UpdateOneServer(server *Server) bool {
 	)
 }
 
-func DeleteOneServerByServerId(serverId string) bool {
+func DeleteServerOneByServerId(serverId string) bool {
 	return Exec(
 		"delete from p_server where ServerId=:ServerId",
 		map[string]string{
