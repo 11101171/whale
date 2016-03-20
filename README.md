@@ -13,8 +13,8 @@ mysql
 
 #deploy
 > ##run
-> 模式dev:   sh run-dev-9999.sh start 
-> 模式prod:  sh run-prod-9988.sh start
+> + 模式dev:   sh run-dev-9999.sh start 
+> + 模式prod:  sh run-prod-9988.sh start
 
 > ##stop
 > sh run-dev-9999.sh stop
