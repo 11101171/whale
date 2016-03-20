@@ -63,9 +63,9 @@ func (u *User) Validate(v *revel.Validation) {
 
 	v.Check(u.Username,
 		revel.Required{},
-		revel.MinSize{Min: 6},
+		revel.MinSize{Min: 4},
 		revel.MaxSize{Max: 12},
-	).Key("user.Username").Message("用户名需要大于6位小于12位")
+	).Key("user.Username").Message("用户名需要大于4位小于12位")
 	v.Check(u.Password,
 		revel.Required{},
 		revel.MinSize{Min: 6},

@@ -6,6 +6,7 @@ package models
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"math/rand"
 	"time"
@@ -56,7 +57,21 @@ func DBMap() *gorp.DbMap {
 func InitDB() *gorp.DbMap {
 	// connect to db using standard Go database/sql API
 	// use whatever database/sql driver you wish
-	db, err := sql.Open("mymysql", "tcp:localhost:3306*gorp/admin/zhong")
+	conf, err := revel.LoadConfig("app.conf")
+	CheckErr(err, "Load app.conf failed")
+	mysqluser, _ := conf.String("mysql.user")
+	mysqlpass, _ := conf.String("mysql.pass")
+	mysqlurls, _ := conf.String("mysql.urls")
+	mysqldb, _ := conf.String("mysql.db")
+
+	db, err := sql.Open("mymysql",
+		fmt.Sprintf("tcp:%s:3306*%s/%s/%s",
+			mysqlurls,
+			mysqldb,
+			mysqluser,
+			mysqlpass,
+		),
+	)
 	CheckErr(err, "mysql.Open.failed")
 
 	// construct a gorp DbMap

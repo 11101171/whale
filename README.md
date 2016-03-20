@@ -7,6 +7,7 @@ mysql
 #Data
 Import Sql folder conf: data.json
 Config app.conf of mysql account
+After that, there is an account for you to use,  account name is 'super', password '123456'
 
 #Deploy
 ##run
