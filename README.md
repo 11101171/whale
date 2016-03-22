@@ -7,7 +7,7 @@ a revel framework web,
 mysql
 
 #data
-+ Import Sql folder conf: data.json
++ Import Sql folder conf: data.json,  mysql -u username -pxxx -D gorp < data.sql
 + Config app.conf of mysql account
 + After that, there is an account for you to use,  account name is 'super', password '123456'
 
