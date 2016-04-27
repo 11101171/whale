@@ -57,7 +57,7 @@ function build(){
 }
 
 function start() {
-    nohup "${runpath}/${project}" -importPath ${project} -srcPath "${runpath}/src" -runMode prod 2>&1 >> ${runpath}/run.log 2>&1 /dev/null &
+    nohup "${runpath}/${project}" -importPath ${project} -srcPath "${runpath}/src" -runMode ${runmode} 2>&1 >> ${runpath}/run.log 2>&1 /dev/null &
     echo $! > ${runpath}/run_pid
     echo ${runpath}" ${1}模式 ${runmode}"
 }

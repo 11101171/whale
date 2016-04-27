@@ -21,7 +21,7 @@ GET    /agents/list                Agents.List
 *      /agents/:id/del             Agents.Del
 GET    /agents/ssh/list            Agents.SshList
 GET    /agents/ssh/:agentId        Agents.SshOne
-WS    /agents/ssh/join/:agentId   Agents.SshJoin
+WS    /agents/ssh/join/:agentId    Agents.SshJoin
 
 GET    /cmds/list/:agentId         Cmds.List
 *      /cmds/:agentId/operate      Cmds.Operate
@@ -41,6 +41,15 @@ GET    /servers/info                Servers.Info
 GET    /servers/share/:serverId     Servers.Share
 # *   /users/:id/:action    Users.:action
 
+# 任务
+GET    /tasks/group/list            Tasks.GroupList
+*      /tasks/group/operate         Tasks.GroupOperate
+*      /tasks/group/:id/operate     Tasks.GroupOperate
+*      /tasks/group/:id/del         Tasks.GroupDel
+# 任务列表
+GET    /tasks/task/list             Tasks.TaskList
+*      /tasks/task/operate          Tasks.TaskOperate
+*      /tasks/task/:id/operate      Tasks.TaskOperate
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

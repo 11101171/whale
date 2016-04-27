@@ -6,9 +6,12 @@ import (
 	"reflect"
 	"github.com/revel/revel"
 	controllers0 "github.com/revel/modules/static/app/controllers"
+	_ "github.com/revel/modules/testrunner/app"
+	controllers1 "github.com/revel/modules/testrunner/app/controllers"
 	_ "whale/app"
 	controllers "whale/app/controllers"
 	models "whale/app/models"
+	tests "whale/tests"
 	"github.com/revel/revel/testing"
 )
 
@@ -81,6 +84,117 @@ func main() {
 					&revel.MethodArg{Name: "filepath", Type: reflect.TypeOf((*string)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
+				},
+			},
+			
+		})
+	
+	revel.RegisterController((*controllers1.TestRunner)(nil),
+		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "Index",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+					70: []string{ 
+						"testSuites",
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "Run",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "suite", Type: reflect.TypeOf((*string)(nil)) },
+					&revel.MethodArg{Name: "test", Type: reflect.TypeOf((*string)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					107: []string{ 
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "List",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			
+		})
+	
+	revel.RegisterController((*controllers.Tasks)(nil),
+		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "GroupList",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+					22: []string{ 
+						"taskGroups",
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "GroupOperate",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "id", Type: reflect.TypeOf((*string)(nil)) },
+					&revel.MethodArg{Name: "taskGroup", Type: reflect.TypeOf((*models.TaskGroup)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					31: []string{ 
+						"taskGroup",
+					},
+					33: []string{ 
+					},
+					38: []string{ 
+						"taskGroup",
+					},
+					47: []string{ 
+						"taskGroup",
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "GroupDel",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "id", Type: reflect.TypeOf((*string)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "TaskList",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "groupId", Type: reflect.TypeOf((*string)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					72: []string{ 
+						"tasks",
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "TaskOperate",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "id", Type: reflect.TypeOf((*string)(nil)) },
+					&revel.MethodArg{Name: "task", Type: reflect.TypeOf((*models.Task)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					82: []string{ 
+						"task",
+						"group",
+					},
+					84: []string{ 
+						"group",
+					},
+					89: []string{ 
+						"task",
+						"group",
+					},
+					98: []string{ 
+						"task",
+						"group",
+					},
 				},
 			},
 			
@@ -422,6 +536,14 @@ func main() {
 		"whale/app/models.(*Server).ValidateUpdate": { 
 			46: "server.ServerId",
 		},
+		"whale/app/models.(*Task).Validate": { 
+			48: "t.TaskName",
+			51: "t.Command",
+		},
+		"whale/app/models.(*TaskGroup).Validate": { 
+			29: "tg.GroupName",
+			32: "tg.Description",
+		},
 		"whale/app/models.(*User).Validate": { 
 			68: "u.Username",
 			73: "u.Password",
@@ -434,6 +556,7 @@ func main() {
 		},
 	}
 	testing.TestSuites = []interface{}{ 
+		(*tests.AppTest)(nil),
 	}
 
 	revel.Run(*port)

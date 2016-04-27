@@ -70,6 +70,88 @@ func (_ tStatic) ServeModule(
 }
 
 
+type tTestRunner struct {}
+var TestRunner tTestRunner
+
+
+func (_ tTestRunner) Index(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("TestRunner.Index", args).Url
+}
+
+func (_ tTestRunner) Run(
+		suite string,
+		test string,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "suite", suite)
+	revel.Unbind(args, "test", test)
+	return revel.MainRouter.Reverse("TestRunner.Run", args).Url
+}
+
+func (_ tTestRunner) List(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("TestRunner.List", args).Url
+}
+
+
+type tTasks struct {}
+var Tasks tTasks
+
+
+func (_ tTasks) GroupList(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Tasks.GroupList", args).Url
+}
+
+func (_ tTasks) GroupOperate(
+		id string,
+		taskGroup interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "id", id)
+	revel.Unbind(args, "taskGroup", taskGroup)
+	return revel.MainRouter.Reverse("Tasks.GroupOperate", args).Url
+}
+
+func (_ tTasks) GroupDel(
+		id string,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "id", id)
+	return revel.MainRouter.Reverse("Tasks.GroupDel", args).Url
+}
+
+func (_ tTasks) TaskList(
+		groupId string,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "groupId", groupId)
+	return revel.MainRouter.Reverse("Tasks.TaskList", args).Url
+}
+
+func (_ tTasks) TaskOperate(
+		id string,
+		task interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "id", id)
+	revel.Unbind(args, "task", task)
+	return revel.MainRouter.Reverse("Tasks.TaskOperate", args).Url
+}
+
+
 type tUsers struct {}
 var Users tUsers
 

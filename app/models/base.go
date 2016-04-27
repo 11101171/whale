@@ -28,6 +28,7 @@ type Base struct {
 }
 
 func (b *Base) PerInsert(_ gorp.SqlExecutor) error {
+	revel.INFO.Println("Super PerInsert")
 	return b.PreI()
 }
 
@@ -123,9 +124,28 @@ func InitDB() *gorp.DbMap {
 	serverAable.SetKeys(false, "ServerId")
 	serverAable.ColMap("Theme").SetNotNull(true)
 	serverAable.ColMap("Content").SetNotNull(true)
-	setColumnSizes(serverAable, map[string]int{
-		"Theme":   100,
-		"Content": 30000,
+	// setColumnSizes(serverAable, map[string]int{
+	// "Theme":   100,
+	// "Content": 30000,
+	// })
+
+	// Task
+	taskTable := dbmap.AddTableWithName(Task{}, "t_task")
+	taskTable.SetKeys(false, "TaskId")
+	taskTable.ColMap("TaskName").SetNotNull(true)
+	taskTable.ColMap("Command").SetNotNull(true)
+	setColumnSizes(taskTable, map[string]int{
+		"TaskName": 100,
+		"Command":  3000,
+	})
+
+	taskGroupTable := dbmap.AddTableWithName(TaskGroup{}, "t_task_group")
+	taskGroupTable.SetKeys(false, "TaskGroupId")
+	taskGroupTable.ColMap("GroupName").SetNotNull(true)
+	setColumnSizes(taskGroupTable, map[string]int{
+		"TaskGroupId": 45,
+		"GroupName":   300,
+		"Description": 2000,
 	})
 
 	dbmap.TraceOn("[gorp]", revel.INFO)
