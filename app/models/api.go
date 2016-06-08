@@ -12,6 +12,7 @@ import (
 	"net/url"
 	"sort"
 	"strings"
+	"github.com/revel/revel"
 )
 
 type Api struct {
@@ -127,14 +128,14 @@ func (apiParam *ApiParam) Md5(keyvalue string) string {
 	var params string = ""
 	for _, filed := range apiParam.Fileds {
 		switch {
-		case filed.Pway != "1" && filed.Location != "header":
+		case filed.Pway != "1" && filed.Location != "header" && filed.Value != "":
 			params = params + "&" + filed.Name + "=" + filed.Value
 		default:
 		}
 	}
 	params = strings.TrimLeft(params, "&")
 	params = params + "key=" + keyvalue
-
+	revel.INFO.Println("params" + params)
 	cipherStr := md5.Sum([]byte(params))
 	return strings.ToUpper(hex.EncodeToString(cipherStr[:]))
 }

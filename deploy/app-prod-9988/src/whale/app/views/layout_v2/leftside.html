@@ -1,0 +1,23 @@
+<!--左侧导航开始-->
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="nav-close"><i class="fa fa-times-circle"></i>
+    </div>
+    <div class="sidebar-collapse">
+        <ul class="nav" id="side-menu" style="display: block;">
+            <li class="nav-header">
+                <div class="element"><a href="{{url "Agents.List"}}" target="_blank">后台管理</a>
+                </div>
+            </li>
+            {{range $index, $elem := .agents}}
+            <li>
+                <a class="J_menuItem" href="{{ url "Agents.SshOne" $elem.AgentId}}">
+                    <i class="fa fa-home"></i>
+                    <span class="nav-label">{{$elem.Memo}} - {{$elem.Host}}</span>
+                </a>
+            </li>
+            {{end}}
+        </ul>
+    </div>
+</nav>
+<!--左侧导航结束-->
+

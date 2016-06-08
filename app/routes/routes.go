@@ -41,6 +41,36 @@ func (_ tSuper) RenderJsonErr(
 }
 
 
+type tTestRunner struct {}
+var TestRunner tTestRunner
+
+
+func (_ tTestRunner) Index(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("TestRunner.Index", args).Url
+}
+
+func (_ tTestRunner) Run(
+		suite string,
+		test string,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "suite", suite)
+	revel.Unbind(args, "test", test)
+	return revel.MainRouter.Reverse("TestRunner.Run", args).Url
+}
+
+func (_ tTestRunner) List(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("TestRunner.List", args).Url
+}
+
+
 type tStatic struct {}
 var Static tStatic
 
@@ -70,33 +100,84 @@ func (_ tStatic) ServeModule(
 }
 
 
-type tTestRunner struct {}
-var TestRunner tTestRunner
+type tServers struct {}
+var Servers tServers
 
 
-func (_ tTestRunner) Index(
+func (_ tServers) Index(
+		serverId string,
 		) string {
 	args := make(map[string]string)
 	
-	return revel.MainRouter.Reverse("TestRunner.Index", args).Url
+	revel.Unbind(args, "serverId", serverId)
+	return revel.MainRouter.Reverse("Servers.Index", args).Url
 }
 
-func (_ tTestRunner) Run(
-		suite string,
-		test string,
+func (_ tServers) List(
 		) string {
 	args := make(map[string]string)
 	
-	revel.Unbind(args, "suite", suite)
-	revel.Unbind(args, "test", test)
-	return revel.MainRouter.Reverse("TestRunner.Run", args).Url
+	return revel.MainRouter.Reverse("Servers.List", args).Url
 }
 
-func (_ tTestRunner) List(
+func (_ tServers) Operate(
+		id string,
+		server interface{},
 		) string {
 	args := make(map[string]string)
 	
-	return revel.MainRouter.Reverse("TestRunner.List", args).Url
+	revel.Unbind(args, "id", id)
+	revel.Unbind(args, "server", server)
+	return revel.MainRouter.Reverse("Servers.Operate", args).Url
+}
+
+func (_ tServers) Del(
+		id string,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "id", id)
+	return revel.MainRouter.Reverse("Servers.Del", args).Url
+}
+
+func (_ tServers) Active(
+		serverId string,
+		apiParamId string,
+		apiParam interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "serverId", serverId)
+	revel.Unbind(args, "apiParamId", apiParamId)
+	revel.Unbind(args, "apiParam", apiParam)
+	return revel.MainRouter.Reverse("Servers.Active", args).Url
+}
+
+func (_ tServers) Share(
+		serverId string,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "serverId", serverId)
+	return revel.MainRouter.Reverse("Servers.Share", args).Url
+}
+
+func (_ tServers) Encode(
+		serverId string,
+		apiParamId string,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "serverId", serverId)
+	revel.Unbind(args, "apiParamId", apiParamId)
+	return revel.MainRouter.Reverse("Servers.Encode", args).Url
+}
+
+func (_ tServers) Info(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Servers.Info", args).Url
 }
 
 
@@ -307,87 +388,6 @@ func (_ tCmds) Del(
 	
 	revel.Unbind(args, "id", id)
 	return revel.MainRouter.Reverse("Cmds.Del", args).Url
-}
-
-
-type tServers struct {}
-var Servers tServers
-
-
-func (_ tServers) Index(
-		serverId string,
-		) string {
-	args := make(map[string]string)
-	
-	revel.Unbind(args, "serverId", serverId)
-	return revel.MainRouter.Reverse("Servers.Index", args).Url
-}
-
-func (_ tServers) List(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("Servers.List", args).Url
-}
-
-func (_ tServers) Operate(
-		id string,
-		server interface{},
-		) string {
-	args := make(map[string]string)
-	
-	revel.Unbind(args, "id", id)
-	revel.Unbind(args, "server", server)
-	return revel.MainRouter.Reverse("Servers.Operate", args).Url
-}
-
-func (_ tServers) Del(
-		id string,
-		) string {
-	args := make(map[string]string)
-	
-	revel.Unbind(args, "id", id)
-	return revel.MainRouter.Reverse("Servers.Del", args).Url
-}
-
-func (_ tServers) Active(
-		serverId string,
-		apiParamId string,
-		apiParam interface{},
-		) string {
-	args := make(map[string]string)
-	
-	revel.Unbind(args, "serverId", serverId)
-	revel.Unbind(args, "apiParamId", apiParamId)
-	revel.Unbind(args, "apiParam", apiParam)
-	return revel.MainRouter.Reverse("Servers.Active", args).Url
-}
-
-func (_ tServers) Share(
-		serverId string,
-		) string {
-	args := make(map[string]string)
-	
-	revel.Unbind(args, "serverId", serverId)
-	return revel.MainRouter.Reverse("Servers.Share", args).Url
-}
-
-func (_ tServers) Encode(
-		serverId string,
-		apiParamId string,
-		) string {
-	args := make(map[string]string)
-	
-	revel.Unbind(args, "serverId", serverId)
-	revel.Unbind(args, "apiParamId", apiParamId)
-	return revel.MainRouter.Reverse("Servers.Encode", args).Url
-}
-
-func (_ tServers) Info(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("Servers.Info", args).Url
 }
 
 
