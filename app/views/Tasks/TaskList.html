@@ -10,15 +10,16 @@
                     <div class="ibox-content">
                         <div class="">
                             <a href="{{url "Tasks.TaskOperate" }}" class="btn btn-primary ">新增任务</a>
-                            <a href="{{url "Tasks.TaskOperate"}}" target="_blank" class="btn btn-primary ">连接远程</a>
                         </div>
                         <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="8">
                                 <thead>
                                 <tr>
                                     <th data-toggle="true">编号</th>
-                                    <th>备注</th>
+                                    
                                     <th>名称</th>
                                     <th>类型</th>
+									 <th>执行状态</th>
+									 <th>执行次数</th>
                                     <th>创建时间</th>
                                     <th>操作</th>
                                 </tr>
@@ -29,13 +30,17 @@
                                     <td>{{$index}}</td>
                                     <td>{{$elem.TaskName}}</td>
                                     <td>{{$elem.TaskType}}</td>
-                                    <td class="center">{{datetime $elem.GmtCreate}}</td>
+								  <td> {{if eq $elem.Status 1}}<span class="label label-primary">运行中{{else}}<span class="label label-default">停止{{end}}</td>
+									<td>{{$elem.ExecuteTimes}}</td>
+                                    <td class="center">{{time $elem.GmtCreate}}</td>
                                     <th>
-                                        <a href="{{url "Agents.Operate" $elem.AgentId}}"><button class="btn btn-primary" type="button" style="font-size:10px;"><i class="fa fa-check"></i> 查看</button></a>
+										 <a href="{{url "Tasks.TaskStart" $elem.TaskId}}"><button class="btn btn-primary" type="button" style="font-size:10px;"><i class="fa fa-check"></i> 开启任务</button></a>
 
-                                        <a href="{{url "Agents.Operate" $elem.AgentId}}"><button class="btn btn-info " type="button" style="font-size:10px;"><i class="fa fa-paste"></i> 编辑</button></a>
+										<a href="{{url "Tasks.TaskStop" $elem.TaskId}}"><button class="btn btn-w-m btn-danger" type="button" style="font-size:10px;"><i class="fa fa-check"></i> 关闭任务</button></a>
+										
+                                        <a href="{{url "Tasks.TaskOperate" $elem.TaskId}}"><button class="btn btn-info " type="button" style="font-size:10px;"><i class="fa fa-paste"></i> 编辑</button></a>
 
-                                        <a href="javascript:void(0)"><button class="btn btn-warning" type="button" style="font-size:10px;" name="{{url "Agents.Del" $elem.AgentId}}" ><i class="fa fa-warning" ></i> 删除</button></a>
+                                        <a href="javascript:void(0)"><button class="btn btn-warning" type="button" style="font-size:10px;" name="{{url "Agents.Del" $elem.TaskId}}" ><i class="fa fa-warning" ></i> 删除</button></a>
 
                                         </th>
                                 </tr>
@@ -55,9 +60,116 @@
                 </div>
             </div>
         </div>
+		
+		
+		
+		 <div class="row">
+            <div class="col-sm-12">
+
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>前10条记录执行情况</h5>
+                        <div class="ibox-tools">
+                            <a href="#" class="btn btn-primary btn-xs">查看更多</a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row m-b-sm m-t-sm">
+                            <div class="col-md-1">
+                                <button type="button" id="loading-example-btn" class="btn btn-white btn-sm"><i class="fa fa-refresh"></i> 刷新</button>
+                            </div>
+                            <div class="col-md-11">
+                                <div class="input-group">
+                                    <input type="text" placeholder="请输入项目名称" class="input-sm form-control"> <span class="input-group-btn">
+                                        <button type="button" class="btn btn-sm btn-primary"> 搜索</button> </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-list">
+
+                            <table class="table table-hover">
+                                <tbody id="logs">
+								{{range $index, $elem := .taskLogs}}
+									<tr>
+                                        <td class="project-status">
+                                            {{if eq $elem.Status 1}}<span class="label label-primary">执行成功{{else}} <span class="label label-default">执行失败{{end}}
+                                        </td>
+                                        <td class="project-title">
+                                            <a href="{{url "Tasks.TaskLog" $elem.TaskLogId}}">任务：{{$elem.TaskName}}</a>
+                                            <br/>
+                                            <small>创建于 {{time $elem.GmtCreate}}</small>
+                                        </td>
+										 <td class="project-title">
+                                           {{if eq $elem.Status 1}}
+											输出：{{$elem.Output}}
+											<br/>
+                                           <small>执行时间：{{$elem.ProcessTime}}秒</small>
+											{{else}}
+											错误：{{$elem.Error}}
+											{{end}}
+                                        </td>
+										
+                                        <td class="project-completion">
+                                                <small>当前进度： 100%</small>
+                                                <div class="progress progress-mini">
+                                                    <div style="width: 100%;" class="progress-bar"></div>
+                                                </div>
+                                        </td>
+                                      
+                                        <td class="project-actions">
+                                            <a href="{{url "Tasks.TaskLog" $elem.TaskLogId}}" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> 查看 </a>
+                                            <!--<a href="projects.html#" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> 编辑 </a>-->
+                                        </td>
+                                    </tr>
+								{{end}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<script id="log" type="text/html">
+    {each taskLogs as item i}
+		<tr>
+                                        <td class="project-status">
+                                            {if item.Status == 1}<span class="label label-primary">执行成功{else} <span class="label label-default">执行失败{/if}
+                                        </td>
+                                        <td class="project-title">
+                                            <a href="/tasks/log/{item.TaskLogId}">任务：{item.TaskName} </a>
+                                            <br/>
+                                            <small>创建于 {item.GmtCreate} </small>
+                                        </td>
+										 <td class="project-title">
+                                           {if item.Status == 1}
+											输出：{item.Output}
+											<br/>
+                                           <small>执行时间：{item.ProcessTime}秒</small>
+											{else}
+											错误：{item.Error}
+											{/if}
+                                        </td>
+										
+                                        <td class="project-completion">
+                                                <small>当前进度： 100%</small>
+                                                <div class="progress progress-mini">
+                                                    <div style="width: 100%;" class="progress-bar"></div>
+                                                </div>
+                                        </td>
+                                      
+                                        <td class="project-actions">
+                                            <a href="/tasks/log/{item.TaskLogId}" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> 查看 </a>                                            
+                                        </td>
+                                    </tr>
+    {/each}
+   
+</script>
+
 
 {{template "layout_v1/footer.html" .}}
-
+	<script src="/public/js/template.js"></script>
     <script>
         $(document).ready(function() {
             $('.footable').footable();
@@ -78,9 +190,26 @@
                 location.href=url
             });
         });
+		template.config("openTag", '{');
+		template.config("closeTag", "}");
+		
+		setInterval(function(){
+			// /ajax/tasks/log/list/1/10
+			$.post('{{url "Tasks.AjaxTaskLogList" 0 10}}',function(result){
+				if(result.r_code == 1) {
+					console.log(result.data)
+					// $("#logs").e
+					//var html = template('log', result.data);
+					var html = template('log', result.data);
+					document.getElementById('logs').innerHTML = html;
+					
+				} else {
+					console.log(result.r_msg)
+				}
+			})
+		}, 3000)
+		
     </script>
-
-
 
 
 

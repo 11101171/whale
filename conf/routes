@@ -47,9 +47,13 @@ GET    /tasks/group/list            Tasks.GroupList
 *      /tasks/group/:id/operate     Tasks.GroupOperate
 *      /tasks/group/:id/del         Tasks.GroupDel
 # 任务列表
-GET    /tasks/task/list             Tasks.TaskList
-*      /tasks/task/operate          Tasks.TaskOperate
-*      /tasks/task/:id/operate      Tasks.TaskOperate
+GET    /tasks/task/list                 Tasks.TaskList
+*      /tasks/task/operate              Tasks.TaskOperate
+*      /tasks/task/:id/operate          Tasks.TaskOperate
+*      /tasks/task/:id/start            Tasks.TaskStart
+*      /tasks/task/:id/stop             Tasks.TaskStop
+GET    /tasks/log/:id                   Tasks.TaskLog
+*     /ajax/tasks/log/list/:page/:pageSize   Tasks.AjaxTaskLogList
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

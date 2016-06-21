@@ -3,6 +3,7 @@ package app
 import (
 	"fmt"
 	"strings"
+	"whale/app/core"
 	"whale/app/models"
 
 	"github.com/revel/revel"
@@ -30,6 +31,7 @@ func init() {
 	// revel.OnAppStart(FillCache)
 	revel.OnAppStart(func() {
 		models.InitDB()
+		core.Init()
 	})
 }
 

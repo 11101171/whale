@@ -65,13 +65,13 @@
                                 </label>
                                 <div class="col-sm-6">
                                         <label>
-                                            <input type="radio" value="0" name="task.Notify" {{if eq $field.Value "0"}}checked{{end}}>  <i></i> 不通知
+                                            <input type="radio" value="0" name="task.Notify" {{if eq $field.Value 0}}checked{{end}}>  <i></i> 不通知
                                         </label>
                                         <label>
-                                             <input type="radio" value="1" name="task.Notify" {{if eq $field.Value "1"}}checked{{end}}> <i></i> 执行失败时通知
+                                             <input type="radio" value="1" name="task.Notify" {{if eq $field.Value 1}}checked{{end}}> <i></i> 执行失败时通知
                                         </label>
                                         <label>
-                                             <input type="radio" value="2" name="task.Notify" {{if eq $field.Value "2"}}checked{{end}}> <i></i> 执行结束时通知
+                                             <input type="radio" value="2" name="task.Notify" {{if eq $field.Value 2}}checked{{end}}> <i></i> 执行结束时通知
                                         </label>
                                 </div>
                                 <p class="m-t-md" style="color:red;">{{$field.Error}}</p>

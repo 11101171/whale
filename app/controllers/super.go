@@ -7,6 +7,7 @@ package controllers
 
 import (
 	"net/http"
+	"time"
 
 	"whale/app/models"
 
@@ -23,6 +24,12 @@ func (c *Super) IsGet() bool {
 
 func (c *Super) IsPost() bool {
 	return c.Request.Method == "Post" || c.Request.Method == "POST"
+}
+
+func init() {
+	revel.TemplateFuncs["time"] = func(date time.Time) string {
+		return date.Format("2006年01月02日 15时04分05秒")
+	}
 }
 
 var (

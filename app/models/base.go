@@ -148,6 +148,14 @@ func InitDB() *gorp.DbMap {
 		"Description": 2000,
 	})
 
+	taskLogTable := dbmap.AddTableWithName(TaskLog{}, "t_task_log")
+	taskLogTable.SetKeys(false, "TaskLogId")
+	setColumnSizes(taskLogTable, map[string]int{
+		"TaskName": 100,
+		"Output":   30000,
+		"Error":    30000,
+	})
+
 	dbmap.TraceOn("[gorp]", revel.INFO)
 	err = dbmap.CreateTablesIfNotExists()
 	CheckErr(err, "Create tables failed")

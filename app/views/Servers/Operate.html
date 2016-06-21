@@ -9,6 +9,7 @@
             {{else}}
                 <h5>添加API配置</h5>
             {{end}}
+            - [在线JSON格式转换]http://www.bejson.com/
                 <div class="ibox-tools">
                     <a class="collapse-link">
                         <i class="fa fa-chevron-up"></i>
@@ -56,8 +57,6 @@
 var str = JSON.stringify(JSON.parse(document.getElementById('content').outerHTML), undefined, 2);
 document.getElementById('content').innerHTML = str;
 </script>
-
-
 
 {{template "layout_v1/footer.html" .}}
 

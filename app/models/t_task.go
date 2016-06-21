@@ -53,6 +53,7 @@ func (t *Task) Validate(v *revel.Validation) {
 
 func (t *Task) ValidateInsert(v *revel.Validation) {
 	t.Validate(v)
+	t.ExecuteTimes = 0
 }
 
 func (t *Task) ValidateUpdate(v *revel.Validation) {
@@ -67,6 +68,17 @@ func (t *Task) PreInsert(_ gorp.SqlExecutor) error {
 func InsertTaskOne(task *Task) bool {
 	err := dbmap.Insert(task)
 	return CheckErr(err, "Insert Task One")
+}
+
+func SelectTaskList(status int) (tasks []Task) {
+	CheckErrSQLSelectList(dbmap.Select(
+		&tasks,
+		"select * from t_task where status=:status order by GmtCreate desc",
+		map[string]int{
+			"status": status,
+		},
+	))
+	return tasks
 }
 
 func SelectTaskListByUserId(userId string) (tasks []Task) {
@@ -104,10 +116,24 @@ func SelectTaskOneById(taskId string) (task Task) {
 
 func UpdateTaskOne(task *Task) bool {
 	return Exec(
-		"update t_task set TaskName=:TaskName where TaskId=:TaskId",
-		map[string]string{
-			"TaskName": task.TaskName,
-			"TaskId":   task.TaskId,
+		`update t_task 
+		 set TaskName=:TaskName,TaskType=:TaskType,Description=:Description,
+			CronSpec=:CronSpec,Concurrent=:Concurrent,Command=:Command,Status=:Status,
+			Notify=:Notify,NotifyEmail=:NotifyEmail,Timeout=:Timeout,ExecuteTimes=:ExecuteTimes 
+		 where TaskId=:TaskId`,
+		map[string]interface{}{
+			"TaskName":     task.TaskName,
+			"TaskType":     task.TaskType,
+			"Description":  task.Description,
+			"CronSpec":     task.CronSpec,
+			"Concurrent":   task.Concurrent,
+			"Command":      task.Command,
+			"Status":       task.Status,
+			"Notify":       task.Notify,
+			"NotifyEmail":  task.NotifyEmail,
+			"Timeout":      task.Timeout,
+			"ExecuteTimes": task.ExecuteTimes,
+			"TaskId":       task.TaskId,
 		},
 	)
 }
