@@ -12,22 +12,30 @@ import (
 	"github.com/revel/revel"
 )
 
+const (
+	EMAIL_NO_SEND = iota
+	EMAIL_SEND_IF_SUC
+	EMAIL_SEND_IF_ERR
+	EMAIL_SEND_IF_END
+)
+
 type Task struct {
 	Base
-	TaskId       string
-	UserId       string
-	GroupId      string
-	TaskName     string
-	TaskType     int
-	Description  string
-	CronSpec     string
-	Concurrent   int
-	Command      string
-	Status       int
-	Notify       int
-	NotifyEmail  string
-	Timeout      int
-	ExecuteTimes int
+	TaskId        string
+	UserId        string
+	GroupId       string
+	TaskName      string
+	TaskType      int
+	Description   string
+	CronSpec      string
+	Concurrent    int
+	Command       string
+	Status        int
+	Notify        int
+	NotifyEmail   string
+	NotifyContent string
+	Timeout       int
+	ExecuteTimes  int
 }
 
 func (t *Task) Validate(v *revel.Validation) {
@@ -119,21 +127,22 @@ func UpdateTaskOne(task *Task) bool {
 		`update t_task 
 		 set TaskName=:TaskName,TaskType=:TaskType,Description=:Description,
 			CronSpec=:CronSpec,Concurrent=:Concurrent,Command=:Command,Status=:Status,
-			Notify=:Notify,NotifyEmail=:NotifyEmail,Timeout=:Timeout,ExecuteTimes=:ExecuteTimes 
+			Notify=:Notify,NotifyEmail=:NotifyEmail,NotifyContent=:NotifyContent,Timeout=:Timeout,ExecuteTimes=:ExecuteTimes 
 		 where TaskId=:TaskId`,
 		map[string]interface{}{
-			"TaskName":     task.TaskName,
-			"TaskType":     task.TaskType,
-			"Description":  task.Description,
-			"CronSpec":     task.CronSpec,
-			"Concurrent":   task.Concurrent,
-			"Command":      task.Command,
-			"Status":       task.Status,
-			"Notify":       task.Notify,
-			"NotifyEmail":  task.NotifyEmail,
-			"Timeout":      task.Timeout,
-			"ExecuteTimes": task.ExecuteTimes,
-			"TaskId":       task.TaskId,
+			"TaskName":      task.TaskName,
+			"TaskType":      task.TaskType,
+			"Description":   task.Description,
+			"CronSpec":      task.CronSpec,
+			"Concurrent":    task.Concurrent,
+			"Command":       task.Command,
+			"Status":        task.Status,
+			"Notify":        task.Notify,
+			"NotifyEmail":   task.NotifyEmail,
+			"NotifyContent": task.NotifyContent,
+			"Timeout":       task.Timeout,
+			"ExecuteTimes":  task.ExecuteTimes,
+			"TaskId":        task.TaskId,
 		},
 	)
 }

@@ -10,8 +10,10 @@ import (
 	"fmt"
 	"os/exec"
 	"runtime/debug"
+	"strings"
 	"sync"
 	"time"
+	"whale/app/core/email"
 	"whale/app/models"
 
 	"github.com/revel/revel"
@@ -120,7 +122,35 @@ func (j Job) Run() {
 		log.Error = err.Error() + ":" + string(berr)
 	} else {
 		log.Status = 1
+
 	}
+
+	if j.task.Notify == models.EMAIL_NO_SEND {
+		if strings.Contains(j.task.NotifyContent, "html") {
+			email.SendHtmlMail(j.task.NotifyEmail, j.task.TaskName, j.task.NotifyContent)
+		} else {
+			email.SendTextMail(j.task.NotifyEmail, j.task.TaskName, j.task.NotifyContent)
+		}
+	} else if j.task.Notify == models.EMAIL_SEND_IF_SUC && err == nil {
+		if strings.Contains(j.task.NotifyContent, "html") {
+			email.SendHtmlMail(j.task.NotifyEmail, j.task.TaskName, j.task.NotifyContent)
+		} else {
+			email.SendTextMail(j.task.NotifyEmail, j.task.TaskName, j.task.NotifyContent)
+		}
+	} else if j.task.Notify == models.EMAIL_SEND_IF_ERR && err != nil {
+		if strings.Contains(j.task.NotifyContent, "html") {
+			email.SendHtmlMail(j.task.NotifyEmail, j.task.TaskName, j.task.NotifyContent)
+		} else {
+			email.SendTextMail(j.task.NotifyEmail, j.task.TaskName, j.task.NotifyContent)
+		}
+	} else if j.task.Notify == models.EMAIL_SEND_IF_END {
+		if strings.Contains(j.task.NotifyContent, "html") {
+			email.SendHtmlMail(j.task.NotifyEmail, j.task.TaskName, j.task.NotifyContent)
+		} else {
+			email.SendTextMail(j.task.NotifyEmail, j.task.TaskName, j.task.NotifyContent)
+		}
+	}
+
 	models.InsertTaskLogOne(log)
 
 	// 更新上次执行时间

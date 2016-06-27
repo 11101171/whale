@@ -135,8 +135,9 @@ func InitDB() *gorp.DbMap {
 	taskTable.ColMap("TaskName").SetNotNull(true)
 	taskTable.ColMap("Command").SetNotNull(true)
 	setColumnSizes(taskTable, map[string]int{
-		"TaskName": 100,
-		"Command":  3000,
+		"TaskName":      100,
+		"Command":       3000,
+		"NotifyContent": 3000,
 	})
 
 	taskGroupTable := dbmap.AddTableWithName(TaskGroup{}, "t_task_group")

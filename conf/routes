@@ -54,6 +54,7 @@ GET    /tasks/task/list                 Tasks.TaskList
 *      /tasks/task/:id/stop             Tasks.TaskStop
 GET    /tasks/log/:id                   Tasks.TaskLog
 *     /ajax/tasks/log/list/:page/:pageSize   Tasks.AjaxTaskLogList
+*     /tasks/send       Tasks.Send
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

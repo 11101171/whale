@@ -41,6 +41,35 @@ func (_ tSuper) RenderJsonErr(
 }
 
 
+type tStatic struct {}
+var Static tStatic
+
+
+func (_ tStatic) Serve(
+		prefix string,
+		filepath string,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "prefix", prefix)
+	revel.Unbind(args, "filepath", filepath)
+	return revel.MainRouter.Reverse("Static.Serve", args).Url
+}
+
+func (_ tStatic) ServeModule(
+		moduleName string,
+		prefix string,
+		filepath string,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "moduleName", moduleName)
+	revel.Unbind(args, "prefix", prefix)
+	revel.Unbind(args, "filepath", filepath)
+	return revel.MainRouter.Reverse("Static.ServeModule", args).Url
+}
+
+
 type tTestRunner struct {}
 var TestRunner tTestRunner
 
@@ -71,32 +100,125 @@ func (_ tTestRunner) List(
 }
 
 
-type tStatic struct {}
-var Static tStatic
+type tUsers struct {}
+var Users tUsers
 
 
-func (_ tStatic) Serve(
-		prefix string,
-		filepath string,
+func (_ tUsers) List(
 		) string {
 	args := make(map[string]string)
 	
-	revel.Unbind(args, "prefix", prefix)
-	revel.Unbind(args, "filepath", filepath)
-	return revel.MainRouter.Reverse("Static.Serve", args).Url
+	return revel.MainRouter.Reverse("Users.List", args).Url
 }
 
-func (_ tStatic) ServeModule(
-		moduleName string,
-		prefix string,
-		filepath string,
+func (_ tUsers) Operate(
+		id string,
+		user interface{},
 		) string {
 	args := make(map[string]string)
 	
-	revel.Unbind(args, "moduleName", moduleName)
-	revel.Unbind(args, "prefix", prefix)
-	revel.Unbind(args, "filepath", filepath)
-	return revel.MainRouter.Reverse("Static.ServeModule", args).Url
+	revel.Unbind(args, "id", id)
+	revel.Unbind(args, "user", user)
+	return revel.MainRouter.Reverse("Users.Operate", args).Url
+}
+
+func (_ tUsers) Del(
+		id string,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "id", id)
+	return revel.MainRouter.Reverse("Users.Del", args).Url
+}
+
+
+type tAgents struct {}
+var Agents tAgents
+
+
+func (_ tAgents) List(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Agents.List", args).Url
+}
+
+func (_ tAgents) Operate(
+		id string,
+		agent interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "id", id)
+	revel.Unbind(args, "agent", agent)
+	return revel.MainRouter.Reverse("Agents.Operate", args).Url
+}
+
+func (_ tAgents) Del(
+		id string,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "id", id)
+	return revel.MainRouter.Reverse("Agents.Del", args).Url
+}
+
+func (_ tAgents) SshList(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Agents.SshList", args).Url
+}
+
+func (_ tAgents) SshOne(
+		agentId string,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "agentId", agentId)
+	return revel.MainRouter.Reverse("Agents.SshOne", args).Url
+}
+
+func (_ tAgents) SshJoin(
+		agentId string,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "agentId", agentId)
+	return revel.MainRouter.Reverse("Agents.SshJoin", args).Url
+}
+
+
+type tApp struct {}
+var App tApp
+
+
+func (_ tApp) Index(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("App.Index", args).Url
+}
+
+
+type tAuth struct {}
+var Auth tAuth
+
+
+func (_ tAuth) Login(
+		user interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "user", user)
+	return revel.MainRouter.Reverse("Auth.Login", args).Url
+}
+
+func (_ tAuth) Logout(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Auth.Logout", args).Url
 }
 
 
@@ -306,126 +428,11 @@ func (_ tTasks) AjaxTaskLogList(
 	return revel.MainRouter.Reverse("Tasks.AjaxTaskLogList", args).Url
 }
 
-
-type tUsers struct {}
-var Users tUsers
-
-
-func (_ tUsers) List(
+func (_ tTasks) Send(
 		) string {
 	args := make(map[string]string)
 	
-	return revel.MainRouter.Reverse("Users.List", args).Url
-}
-
-func (_ tUsers) Operate(
-		id string,
-		user interface{},
-		) string {
-	args := make(map[string]string)
-	
-	revel.Unbind(args, "id", id)
-	revel.Unbind(args, "user", user)
-	return revel.MainRouter.Reverse("Users.Operate", args).Url
-}
-
-func (_ tUsers) Del(
-		id string,
-		) string {
-	args := make(map[string]string)
-	
-	revel.Unbind(args, "id", id)
-	return revel.MainRouter.Reverse("Users.Del", args).Url
-}
-
-
-type tAgents struct {}
-var Agents tAgents
-
-
-func (_ tAgents) List(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("Agents.List", args).Url
-}
-
-func (_ tAgents) Operate(
-		id string,
-		agent interface{},
-		) string {
-	args := make(map[string]string)
-	
-	revel.Unbind(args, "id", id)
-	revel.Unbind(args, "agent", agent)
-	return revel.MainRouter.Reverse("Agents.Operate", args).Url
-}
-
-func (_ tAgents) Del(
-		id string,
-		) string {
-	args := make(map[string]string)
-	
-	revel.Unbind(args, "id", id)
-	return revel.MainRouter.Reverse("Agents.Del", args).Url
-}
-
-func (_ tAgents) SshList(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("Agents.SshList", args).Url
-}
-
-func (_ tAgents) SshOne(
-		agentId string,
-		) string {
-	args := make(map[string]string)
-	
-	revel.Unbind(args, "agentId", agentId)
-	return revel.MainRouter.Reverse("Agents.SshOne", args).Url
-}
-
-func (_ tAgents) SshJoin(
-		agentId string,
-		) string {
-	args := make(map[string]string)
-	
-	revel.Unbind(args, "agentId", agentId)
-	return revel.MainRouter.Reverse("Agents.SshJoin", args).Url
-}
-
-
-type tApp struct {}
-var App tApp
-
-
-func (_ tApp) Index(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("App.Index", args).Url
-}
-
-
-type tAuth struct {}
-var Auth tAuth
-
-
-func (_ tAuth) Login(
-		user interface{},
-		) string {
-	args := make(map[string]string)
-	
-	revel.Unbind(args, "user", user)
-	return revel.MainRouter.Reverse("Auth.Login", args).Url
-}
-
-func (_ tAuth) Logout(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("Auth.Logout", args).Url
+	return revel.MainRouter.Reverse("Tasks.Send", args).Url
 }
 
 

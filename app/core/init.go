@@ -6,6 +6,7 @@
 package core
 
 import (
+	"whale/app/core/email"
 	"whale/app/core/jobs"
 	"whale/app/models"
 
@@ -19,6 +20,7 @@ func init() {
 func Init() {
 	revel.INFO.Println("start Init")
 	jobs.InitCorn()
+	email.InitEmail()
 }
 
 func InitJobs() {

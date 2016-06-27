@@ -6,6 +6,7 @@
 package controllers
 
 import (
+	"whale/app/core/email"
 	"whale/app/core/jobs"
 	"whale/app/models"
 	"whale/app/routes"
@@ -167,6 +168,11 @@ func (c Tasks) AjaxTaskLogList(page int, pageSize int) revel.Result {
 	return c.RenderJsonSucWithData(map[string]interface{}{
 		"taskLogs": taskLogs,
 	})
+}
+
+func (c Tasks) Send() revel.Result {
+	email.SendHtmlMail("zengningzhong@souche.com", "jajhaja", "<html><h>11111</h></html>")
+	return c.RenderJsonSuc()
 }
 
 func init() {

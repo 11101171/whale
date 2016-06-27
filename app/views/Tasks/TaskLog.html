@@ -46,7 +46,7 @@
                                 </div>
 								<div class="feed-element">                                    
                                     <div class="media-body ">                                        
-										<small class="text-muted">执行状态: {{if eq .taskLog.Status 1}}<span class="label label-primary">成功{{else}}<span class="label label-default">失败{{end}}    </small>                                     
+										<small class="text-muted">执行状态: {{if eq 1 .taskLog.Status}}<span class="label label-primary">成功{{else}}<span class="label label-default">失败{{end}}    </small>                                     
 										<br>
 										{{if eq .taskLog.Status 1}}
 											输出：
@@ -62,7 +62,7 @@
                                 </div>
 								<div class="feed-element">                                    
                                     <div class="media-body ">                                        
-										<small class="text-muted">通知:{{if eq .task.Notify 1}} {{.task.NotifyEmail}} {{else}} 不通知 {{end}}</small>                                       
+										<small class="text-muted">通知:{{if eq 1 .task.Notify}} {{.task.NotifyEmail}} {{else}} 不通知 {{end}}</small>                                       
 										<br>
                                     </div>
                                 </div>
