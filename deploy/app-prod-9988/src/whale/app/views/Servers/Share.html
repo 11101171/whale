@@ -1,0 +1,181 @@
+{{set . "title" "Home"}}
+ <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <title>玩儿-title</title>
+    <link rel="icon" href="/public/hp/img/profile_small.jpg" type="image/x-icon" />
+    <link href="/public/hp/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="/public/hp/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="/public/hp/css/plugins/footable/footable.core.css" rel="stylesheet">
+    <link href="/public/hp/css/animate.min.css" rel="stylesheet">
+    <link href="/public/hp/css/login.min.css" rel="stylesheet">
+     <!-- Sweet Alert -->
+    <link href="/public/hp/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="/public/hp/css/plugins/codemirror/codemirror.css" rel="stylesheet">
+    <link href="/public/hp/css/plugins/codemirror/ambiance.css" rel="stylesheet">
+    <link href="/public/hp/css/plugins/jsTree/style.min.css" rel="stylesheet">
+    <link href="/public/hp/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+    <link href="/public/hp/css/style.min.css?v=3.0.0" rel="stylesheet">
+</head>
+<body>
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        {{if .server.ServerId}}
+        <div class="row">
+            <div class="col-sm-6">
+
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{.server.Theme}}  <small>API列表</small></h5>
+                        <div class="ibox-tools">
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div id="jstree">
+                            <ul>
+                                <li class="jstree-open">{{.jsonBody.Name}}
+                                    <ul>
+                                        {{range $item := .jsonBody.Lists}}
+                                        <li class="jstree-open">{{$item.Folder}}
+                                            <ul>
+                                                {{range $apiParam := $item.ApiParams}}
+                                                <li data-jstree='{"type":"html"}' name="/active/{{$apiParam.Id}}">{{$apiParam.Name}}&nbsp;&nbsp;{{$apiParam.Path}}</li>
+                                                {{end}}
+                                            </ul>
+                                         </li>
+                                        {{end}}
+
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6" style="height: 1000px;">
+                <iframe id="active" src="{{url "Servers.Info"}}" width="100%" height="100%" frameborder="0"></iframe>
+            </div>
+        </div>
+        {{end}}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    {{template "layout_v1/footer.html" .}}
+
+    <style>
+        .jstree-open > .jstree-anchor > .fa-folder:before {
+            content: "\f07c";
+        }
+
+        .jstree-default .jstree-icon.none {
+            width: 0;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function() {
+            $("#jstree").jstree({
+                "core": {
+                    "check_callback": true
+                },
+                "plugins": ["types", "dnd"],
+                "types": {
+                    "default": {
+                        "icon": "fa fa-folder"
+                    },
+                    "html": {
+                        "icon": "fa fa-file-code-o"
+                    },
+                    "svg": {
+                        "icon": "fa fa-file-picture-o"
+                    },
+                    "css": {
+                        "icon": "fa fa-file-code-o"
+                    },
+                    "img": {
+                        "icon": "fa fa-file-image-o"
+                    },
+                    "js": {
+                        "icon": "fa fa-file-text-o"
+                    }
+                }
+            });
+
+        });
+
+        $('#jstree').on("changed.jstree", function (e, data) {
+          // console.log(data.selected);
+
+          var ipath = data.node.li_attr.name;
+          console.log(ipath);
+          var path = "/servers/{{.server.ServerId}}";
+          if(ipath) {
+                $('#active').attr("src",path + ipath);
+          }
+
+        });
+
+          $('.del').click(function () {
+            var url = this.name
+            swal({
+                title: "您确定要删除这条信息吗",
+                text: "删除后将无法恢复，请谨慎操作！",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "删除",
+                closeOnConfirm: false
+            }, function () {
+                swal("删除成功！", "您已经永久删除了这条信息。", "success");
+                location.href=url
+            });
+        });
+
+
+          function ifrmLoadedDoSubmit(ifdata) {
+            // code here
+            $.post("/servers/xx/active/xx",
+                ifdata,
+                function(data){
+                    if(data.r_code==1) {
+                        var format_str = data.data.resp.replace(/,/g,",<br/>").replace(/，/g,"，<br/>");
+                        format_str = format_str.replace(/{/g,"{<br/>").replace(/}/g,"}<br/>");
+                        // format_str = format_str.replace(/[/g,"[<br/>").replace(/]/g,"]<br/>");
+                        swal({
+                            title: "成功",
+                            text: format_str.trim('"'),
+                            animation: "slide-from-top",
+                            html: true,
+                            type: "success"
+                        });
+                    } else {
+                        swal({
+                            title: "失败",
+                            text: data.r_msg,
+                            animation: "slide-from-top",
+                            type: "error"
+                        });
+
+                        // alert('通讯错误'+data.r_msg)
+                    }
+
+                }
+            );
+        }
+
+
+    </script>
+
+</body>
+
+</html>
