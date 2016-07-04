@@ -78,7 +78,7 @@
                     <div class="ibox-content">
                         <div class="row m-b-sm m-t-sm">
                             <div class="col-md-1">
-                                <button type="button" id="loading-example-btn" class="btn btn-white btn-sm"><i class="fa fa-refresh"></i> 刷新</button>
+                                <button type="button" id="loading-example-btn" class="btn btn-white btn-sm" onclick="onRefresh()"><i class="fa fa-refresh"></i> 刷新</button>
                             </div>
                             <div class="col-md-11">
                                 <div class="input-group">
@@ -195,11 +195,18 @@
 		template.config("openTag", '{');
 		template.config("closeTag", "}");
 		
-		setInterval(function(){
-			// /ajax/tasks/log/list/1/10
+		function onRefresh(){
+			// document.getElementById('logs').innerHTML = "";
+			swal({   
+				title: "正在刷新...",   
+				//text: "刷新剩余2s",   
+				timer: 2000,   
+				showConfirmButton: false 
+			});
+			
 			$.post('{{url "Tasks.AjaxTaskLogList" 0 10}}',function(result){
 				if(result.r_code == 1) {
-					console.log(result.data)
+					// console.log(result.data)
 					// $("#logs").e
 					//var html = template('log', result.data);
 					var html = template('log', result.data);
@@ -208,8 +215,12 @@
 				} else {
 					console.log(result.r_msg)
 				}
-			})
-		}, 3000)
+			});
+		}
+		//setInterval(function(){
+			// /ajax/tasks/log/list/1/10
+			//onRefresh();
+		//}, 3000)
 		
     </script>
 

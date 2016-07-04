@@ -20,18 +20,23 @@ var (
 
 var mate = `
 ========================
-=== 开启corn workpool
+=== 开启corn workpool %d
 ========================
 `
 
 func InitCorn() {
-	workPool = make(chan bool, 10)
+	conf, err := revel.LoadConfig("app.conf")
+	if err != nil {
+		revel.ERROR.Panicln("读取app.conf失败")
+	}
+	cronPoolSize, _ := conf.Raw().Int(revel.RunMode, "cron.poolSize")
+	workPool = make(chan bool, cronPoolSize)
 	mainCron = cron.New()
 	// job := NewCommandJob("11111", "zhangsan", "ls")
 	// mainCron.Schedule(Every(5*time.Second+5*time.Nanosecond), job)
-	// AddJob("0/3 * * * * ?", job)
+	// AddJob("1 1 10 14,18 9 ?", job)
 	mainCron.Start()
-	revel.INFO.Println(mate)
+	revel.INFO.Printf(mate, cronPoolSize)
 }
 
 func AddJob(spec string, job *Job) bool {

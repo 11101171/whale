@@ -19,7 +19,7 @@ var (
 
 var mate = `
 ========================
-=== 开启mail workpool
+=== 开启mail workpool  %d
 ========================
 `
 
@@ -38,7 +38,7 @@ func InitEmail() {
 		conf.StringDefault("mail.from", ""),
 	)
 	queueSize := conf.IntDefault("mail.queueSize", 20)
-	revel.INFO.Println(mate)
+	revel.INFO.Printf(mate, queueSize)
 	sendChannel = make(chan *Email, queueSize)
 
 	go func() {
