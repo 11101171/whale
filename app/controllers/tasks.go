@@ -110,6 +110,13 @@ func (c Tasks) TaskOperate(id string, task models.Task) revel.Result {
 	}
 }
 
+func (c Tasks) TaskDel(id string) revel.Result {
+	if id != "" && models.DeleteTaskOneById(id) {
+		return c.Redirect(routes.Tasks.TaskList(""))
+	}
+	return c.RenderJsonErr()
+}
+
 // 启动任务
 func (c Tasks) TaskStart(id string) revel.Result {
 	task := models.SelectTaskOneById(id)

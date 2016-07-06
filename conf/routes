@@ -53,6 +53,7 @@ GET    /tasks/task/list                 Tasks.TaskList
 *      /tasks/task/:id/start            Tasks.TaskStart
 *      /tasks/task/:id/stop             Tasks.TaskStop
 GET    /tasks/log/:id                   Tasks.TaskLog
+*      /tasks/task/:id/del              Tasks.TaskDel
 *     /ajax/tasks/log/list/:page/:pageSize   Tasks.AjaxTaskLogList
 *     /tasks/send       Tasks.Send
 
